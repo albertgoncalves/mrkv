@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+cppcheck \
+    --enable=all \
+    --suppress=missingIncludeSystem \
+    --suppress=unusedFunction  \
+    "$WD/src" \
+    | sed 's/ \.\.\.//g'
+for x in c h; do
+    clang-format -i -verbose "$WD/src"/*."$x"
+done
+for x in "$WD/src"/*.hs; do
+    echo "Checking $x"
+    hlint "$x"
+    echo "Formatting $x"
+    ormolu -m inplace "$x"
+done
+
+(
+    flags=(
+        -fdiagnostics-color=always
+        -outputdir "$WD/build"
+        -Wall
+        -Wcompat
+        -Werror
+        -Wincomplete-record-updates
+        -Wincomplete-uni-patterns
+        -Wmissing-export-lists
+        -Wno-unused-top-binds
+        -Wpartial-fields
+    )
+    files=(
+        "pcg_random.c"
+        "Main.hs"
+    )
+    cd "$WD/src"
+    ghc "${flags[@]}" -o "$WD/bin/main" "${files[@]}"
+    "$WD/bin/main" "$WD/data/lines.txt"
+)
