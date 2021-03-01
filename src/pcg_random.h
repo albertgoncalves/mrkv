@@ -3,11 +3,11 @@
 
 #include <stdint.h>
 
+typedef uint32_t u32;
 typedef uint64_t u64;
-typedef float    f32;
 
 void set_seed(u64, u64);
 
-f32 get_random_f32(void);
+u32 get_random_bounded_u32(u32);
 
 #endif

@@ -1,16 +1,11 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-module Random (setSeed, getRandom) where
+module Random (seed, randomBounded) where
 
-import Data.Word (Word64)
-import Foreign.C.Types (CFloat (..))
+import Data.Word (Word32, Word64)
 
-foreign import ccall "set_seed" c_set_seed :: Word64 -> Word64 -> IO ()
+foreign import ccall "set_seed"
+  seed :: Word64 -> Word64 -> IO ()
 
-setSeed :: Word64 -> Word64 -> IO ()
-setSeed = c_set_seed
-
-foreign import ccall "get_random_f32" c_get_random_f32 :: IO CFloat
-
-getRandom :: IO Float
-getRandom = realToFrac <$> c_get_random_f32
+foreign import ccall "get_random_bounded_u32"
+  randomBounded :: Word32 -> IO Word32
