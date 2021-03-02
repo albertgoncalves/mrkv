@@ -1,4 +1,4 @@
-module Markov (distrsToChain, textToDistrs, chainToText, seed) where
+module Markov where
 
 import Data.Map.Strict
   ( Map,
@@ -14,7 +14,7 @@ import Data.Map.Strict
 import Data.Maybe (mapMaybe)
 import Data.Text (Text, lines, unwords, words)
 import Data.Word (Word32)
-import Random (randomBounded, seed)
+import Random (randomBounded)
 import Prelude hiding (Word, lines, unwords, words)
 
 data Token

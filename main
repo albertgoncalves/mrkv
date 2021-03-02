@@ -25,11 +25,14 @@ done
         -Wall
         -Wcompat
         -Werror
+        -Widentities
         -Wincomplete-record-updates
         -Wincomplete-uni-patterns
-        -Wmissing-export-lists
-        -Wno-unused-top-binds
+        -Wmonomorphism-restriction
         -Wpartial-fields
+        -Wredundant-constraints
+        -Wunused-packages
+        -Wunused-type-patterns
     )
     files=(
         "pcg_random.c"

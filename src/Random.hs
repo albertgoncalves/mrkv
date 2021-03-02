@@ -1,6 +1,6 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-module Random (seed, randomBounded) where
+module Random where
 
 import Data.Word (Word32, Word64)
 
