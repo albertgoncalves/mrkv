@@ -22,6 +22,8 @@ done
     flags=(
         -fdiagnostics-color=always
         -outputdir "$WD/build"
+        -prof
+        -rtsopts
         -Wall
         -Wcompat
         -Werror
@@ -38,7 +40,9 @@ done
         "pcg_random.c"
         "Main.hs"
     )
-    cd "$WD/src"
-    ghc "${flags[@]}" -o "$WD/bin/main" "${files[@]}"
-    "$WD/bin/main" "$WD/data/lines.txt"
+    (
+        cd "$WD/src"
+        ghc "${flags[@]}" -o "$WD/bin/main" "${files[@]}"
+    )
+    "$WD/bin/main" +RTS -pa -RTS "$WD/data/lines.txt"
 )
