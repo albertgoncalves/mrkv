@@ -1,5 +1,6 @@
 module Markov where
 
+import Control.Exception (assert)
 import Data.Map.Strict
   ( Map,
     empty,
@@ -40,7 +41,8 @@ updateTables :: Map Token Table -> [Token] -> Map Token Table
 updateTables m xs = foldr (uncurry insertTokens) m $ zip xs $ tail xs
 
 tableToDistr :: Table -> Distr
-tableToDistr t = (sum ns, fromList $ zip (scanl1 (+) ns) ws)
+tableToDistr t =
+  assert (all (0 <) ns) (sum ns, fromList $ zip (scanl1 (+) ns) ws)
   where
     (ws, ns) = unzip $ toList t
 
