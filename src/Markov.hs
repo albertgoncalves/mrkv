@@ -1,7 +1,7 @@
 module Markov where
 
 import Control.Exception (assert)
-import Data.Map.Strict
+import Data.Map
   ( Map,
     empty,
     fromList,
