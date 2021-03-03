@@ -21,15 +21,16 @@ done
 (
     flags=(
         -fdiagnostics-color=always
+        -fprof-auto-top
         -outputdir "$WD/build"
         -prof
-        -rtsopts
         -Wall
         -Wcompat
         -Werror
         -Widentities
         -Wincomplete-record-updates
         -Wincomplete-uni-patterns
+        -with-rtsopts "-pa"
         -Wmonomorphism-restriction
         -Wpartial-fields
         -Wredundant-constraints
@@ -44,5 +45,5 @@ done
         cd "$WD/src"
         ghc "${flags[@]}" -o "$WD/bin/main" "${files[@]}"
     )
-    "$WD/bin/main" +RTS -pa -RTS "$WD/data/lines.txt"
+    "$WD/bin/main" "$WD/data/lines.txt"
 )
