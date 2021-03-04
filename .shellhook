@@ -2,7 +2,7 @@
 
 export WD=$PWD
 
-for x in bin build; do
+for x in bin build data; do
     if [ ! -d "$WD/$x" ]; then
         mkdir "$WD/$x"
     fi

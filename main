@@ -45,5 +45,13 @@ done
         cd "$WD/src"
         ghc "${flags[@]}" -o "$WD/bin/main" "${files[@]}"
     )
-    "$WD/bin/main" "$WD/data/lines.txt"
+    (
+        if [ ! -f "$WD/data/corpus.txt" ]; then
+            wget \
+                -O "$WD/data/corpus.txt" \
+                "http://www.gutenberg.org/files/10/10-0.txt"
+        fi
+        printf "\n"
+        "$WD/bin/main" "$WD/data/corpus.txt"
+    )
 )

@@ -8,6 +8,7 @@ mkShell {
         hlint
         ormolu
         shellcheck
+        wget
     ];
     shellHook = ''
         . .shellhook
