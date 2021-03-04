@@ -22,6 +22,7 @@ done
     flags=(
         -fdiagnostics-color=always
         -fprof-auto-top
+        -O
         -outputdir "$WD/build"
         -prof
         -Wall
@@ -30,7 +31,7 @@ done
         -Widentities
         -Wincomplete-record-updates
         -Wincomplete-uni-patterns
-        -with-rtsopts "-pa"
+        -with-rtsopts "-A512m -pa"
         -Wmonomorphism-restriction
         -Wpartial-fields
         -Wredundant-constraints
