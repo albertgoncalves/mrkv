@@ -29,7 +29,11 @@ type Table = Map Token Word32
 type Distr = (Word32, Map Word32 Token)
 
 textToTokens :: Text -> [[Token]]
-textToTokens = map (\x -> Start : map Word (words x) ++ [End]) . lines
+textToTokens =
+  map ((Start :) . (++ [End]) . map Word)
+    . filter ((4 <) . length)
+    . map words
+    . lines
 
 combineTables :: Table -> Table -> Table
 combineTables = unionWith (+)
