@@ -20,7 +20,7 @@ import Prelude hiding (Word, lines, unwords, words)
 
 data Token
   = Start
-  | Word Text
+  | Word !Text
   | End
   deriving (Eq, Ord, Show)
 
