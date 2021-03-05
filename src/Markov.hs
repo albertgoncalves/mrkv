@@ -29,20 +29,16 @@ type Table = Map Token Word32
 type Distr = (Word32, Map Word32 Token)
 
 textToTokens :: Text -> [[Token]]
-textToTokens =
-  map ((Start :) . (++ [End]) . map Word)
-    . filter ((4 <) . length)
-    . map words
-    . lines
+textToTokens = map ((Start :) . (++ [End]) . map Word . words) . lines
 
 combineTables :: Table -> Table -> Table
 combineTables = unionWith (+)
 
-insertTokens :: Token -> Token -> Map Token Table -> Map Token Table
-insertTokens a b = insertWith combineTables a (singleton b 1)
+insertTokens :: (Token, Token) -> Map Token Table -> Map Token Table
+insertTokens (k, v) = insertWith combineTables k (singleton v 1)
 
 updateTables :: Map Token Table -> [Token] -> Map Token Table
-updateTables m xs = foldr (uncurry insertTokens) m $ zip xs $ tail xs
+updateTables m xs = foldr insertTokens m $ zip xs $ tail xs
 
 tableToDistr :: Table -> Distr
 tableToDistr t =
@@ -58,6 +54,7 @@ makeDistrs =
 distrsToChain :: Map Token Distr -> IO [Token]
 distrsToChain m = f Start
   where
+    f :: Token -> IO [Token]
     f t = (t :) <$> loop t
 
     loop :: Token -> IO [Token]
@@ -76,5 +73,6 @@ textToDistrs = makeDistrs . textToTokens
 chainToText :: [Token] -> Text
 chainToText = unwords . mapMaybe f
   where
+    f :: Token -> Maybe Text
     f (Word x) = Just x
     f _ = Nothing
