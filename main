@@ -23,7 +23,6 @@ done
         -fdiagnostics-color=always
         -fprof-auto-top
         -funbox-strict-fields
-        -O
         -outputdir "$WD/build"
         -prof
         -Wall

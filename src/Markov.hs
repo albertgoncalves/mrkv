@@ -4,12 +4,13 @@ import Control.Exception (assert)
 import Data.Map
   ( Map,
     empty,
-    fromList,
+    fromAscList,
     insertWith,
     lookupGT,
     singleton,
     toList,
     unionWith,
+    valid,
     (!),
   )
 import Data.Maybe (mapMaybe)
@@ -22,7 +23,7 @@ data Token
   = Start
   | Word !Text
   | End
-  deriving (Eq, Ord, Show)
+  deriving (Eq, Ord)
 
 type Table = Map Token Word32
 
@@ -38,13 +39,13 @@ insertTokens :: (Token, Token) -> Map Token Table -> Map Token Table
 insertTokens (k, v) = insertWith combineTables k (singleton v 1)
 
 updateTables :: Map Token Table -> [Token] -> Map Token Table
-updateTables m xs = foldr insertTokens m $ zip xs $ tail xs
+updateTables m ts = foldr insertTokens m $ zip ts $ tail ts
 
 tableToDistr :: Table -> Distr
-tableToDistr t =
-  assert (all (0 <) ns) (sum ns, fromList $ zip (scanl1 (+) ns) ws)
+tableToDistr t = assert (all (0 <) ns && valid m) (sum ns, m)
   where
     (ws, ns) = unzip $ toList t
+    m = fromAscList $ zip (scanl1 (+) ns) ws
 
 makeDistrs :: [[Token]] -> Map Token Distr
 makeDistrs =
@@ -59,9 +60,8 @@ distrsToChain m = f Start
 
     loop :: Token -> IO [Token]
     loop End = return []
-    loop t = do
-      i <- randomBounded n
-      case lookupGT i m' of
+    loop t =
+      randomBounded n >>= \i -> case lookupGT i m' of
         Just (_, t') -> f t'
         Nothing -> undefined
       where
