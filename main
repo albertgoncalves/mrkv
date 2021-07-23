@@ -26,10 +26,16 @@ set -euo pipefail
 )
 (
     flags=(
-        -fdiagnostics-color=always
+        "-fdiagnostics-color=always"
         -fprof-auto-top
         -funbox-strict-fields
-        -outputdir "$WD/build"
+        "-i$WD/src"
+        "-optl -fuse-ld=lld"
+        "-outputdir $WD/build"
+        "-pgma clang"
+        "-pgmc clang"
+        "-pgml clang"
+        "-pgmP clang"
         -prof
         -Wall
         -Wcompat
