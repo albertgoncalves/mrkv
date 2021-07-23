@@ -2,22 +2,28 @@
 
 set -euo pipefail
 
-cppcheck \
-    --enable=all \
-    --suppress=missingIncludeSystem \
-    --suppress=unusedFunction  \
-    "$WD/src" \
-    | sed 's/ \.\.\.//g'
-for x in c h; do
-    clang-format -i -verbose "$WD/src"/*."$x"
-done
-for x in "$WD/src"/*.hs; do
-    echo "Checking $x"
-    hlint "$x"
-    echo "Formatting $x"
-    ormolu -m inplace "$x"
-done
-
+(
+    cppcheck \
+        --enable=all \
+        --suppress=missingIncludeSystem \
+        --suppress=unusedFunction  \
+        "$WD/src" \
+        | sed 's/ \.\.\.//g' &
+    for x in c h; do
+        clang-format -i -verbose "$WD/src"/*."$x" &
+    done
+    for x in "$WD/src"/*.hs; do
+        (
+            echo "Checking $x"
+            hlint "$x"
+            echo "Formatting $x"
+            ormolu -m inplace "$x"
+        ) &
+    done
+    for _ in $(jobs -p); do
+        wait -n
+    done
+)
 (
     flags=(
         -fdiagnostics-color=always
