@@ -32,10 +32,6 @@ set -euo pipefail
         "-i$WD/src"
         "-optl -fuse-ld=lld"
         "-outputdir $WD/build"
-        "-pgma clang"
-        "-pgmc clang"
-        "-pgml clang"
-        "-pgmP clang"
         -prof
         -Wall
         -Wcompat
